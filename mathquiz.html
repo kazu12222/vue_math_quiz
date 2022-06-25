@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #AnsButton {
+        width: 100%;
+        border: solid 2px blue;
+        background-color: lightskyblue;
+        padding: 20px;
+        font-size: xx-large;
+      }
+      #title {
+        text-align: center;
+        margin: 30px;
+        font-size: xxx-large;
+      }
+      #score {
+        text-align: center;
+        margin: 30px;
+        font-size: x-large;
+        color: red;
+      }
+    </style>
+    <title>game</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1 v-if="flag" id="title">{{firstNumber}}+{{secondNumber}}</h1>
+      <h1 v-if="!flag" id="title">pushを押したらクイズ開始</h1>
+      <button
+        v-on:click="answerIsCorrect(choiceArray[0]); generateAnswers()"
+        id="AnsButton"
+        class="text-center"
+      >
+        {{choiceArray[0]}}
+      </button>
+      <button
+        v-on:click="answerIsCorrect(choiceArray[1]); generateAnswers()"
+        id="AnsButton"
+        class="text-center"
+      >
+        {{choiceArray[1]}}
+      </button>
+      <button
+        v-on:click="answerIsCorrect(choiceArray[2]); generateAnswers()"
+        id="AnsButton"
+        class="text-center"
+      >
+        {{choiceArray[2]}}
+      </button>
+      <button
+        v-on:click="answerIsCorrect(choiceArray[3]); generateAnswers()"
+        id="AnsButton"
+        class="text-center"
+      >
+        {{choiceArray[3]}}
+      </button>
+      <p id="score">SCORE:{{score}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          score: 0,
+          correctAnswer: 0,
+          choiceArray: ["push", "push", "push", "push"],
+          firstNumber: 0,
+          secondNumber: 0,
+          flag: false,
+        },
+        methods: {
+          window: (onload = function () {
+            this.firstNumber = Math.floor(Math.random() * 50) + 1;
+            this.secondNumber = Math.floor(Math.random() * 50) + 1;
+            let answerList = [];
+
+            this.correctAnswer = this.firstNumber + this.secondNumber;
+
+            for (let i = 0; i < 3; i++) {
+              answerList.push(Math.floor(Math.random() * 100) + 1);
+            }
+            answerList.push(this.correctAnswer);
+            console.log(answerList);
+            this.choiceArray = _.shuffle(answerList);
+          }),
+          answerIsCorrect: function (answer) {
+            let isCorrect = answer == this.correctAnswer ? true : false;
+            if (isCorrect) {
+              this.score += 1;
+            } else if (answer == "push") {
+              this.flag = true;
+            } else {
+              this.score -= 1;
+            }
+          },
+          generateAnswers: function () {
+            this.firstNumber = Math.floor(Math.random() * 50) + 1;
+            this.secondNumber = Math.floor(Math.random() * 50) + 1;
+            let answerList = [];
+
+            this.correctAnswer = this.firstNumber + this.secondNumber;
+
+            for (let i = 0; i < 3; i++) {
+              answerList.push(Math.floor(Math.random() * 100) + 1);
+            }
+            answerList.push(this.correctAnswer);
+            console.log(answerList);
+            this.choiceArray = _.shuffle(answerList);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
